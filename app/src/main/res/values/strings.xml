@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">ARTprojecte</string>
+    <string name="app_name">ARTproject</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>
