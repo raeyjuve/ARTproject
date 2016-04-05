@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/logoPegadaian"
+        android:src="@drawable/logopegadaian" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnKonvensional"
+        android:src="@drawable/gadaikonven"
+        android:layout_gravity="center_vertical" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSyariah"
+        android:src="@drawable/gadaisyariah" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HARGA EMAS"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:background="@color/iron" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="178dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jual"
+                android:gravity="center"
+                android:textSize="26dp"
+                android:background="@color/primary_light" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rp. 5.320,-"
+                android:gravity="center"
+                android:textSize="24dp"
+                android:paddingTop="3dp"
+                android:background="@color/primary_light" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="178dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Beli"
+                android:gravity="center"
+                android:textSize="26dp"
+                android:background="@color/primary_light"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rp. 5.150,-"
+                android:gravity="center"
+                android:textSize="24dp"
+                android:paddingTop="3dp"
+                android:background="@color/primary_light" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
