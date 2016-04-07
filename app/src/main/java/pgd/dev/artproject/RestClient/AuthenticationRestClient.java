@@ -1,6 +1,7 @@
 package pgd.dev.artproject.RestClient;
 
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -30,6 +31,8 @@ public class AuthenticationRestClient {
         requestData.put("password", password);
 
         try {
+            // add message converter : GSON http message
+            restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
             return restTemplate.postForObject(url, requestData, GenericResponse.class);
         } catch (Exception err){
             throw new GagalLoginException("Server tidak bisa dihubungi");
