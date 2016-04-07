@@ -1,17 +1,15 @@
-package Adapter;
+package pgd.dev.artproject.Adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import Fragments.HomeFragment;
-import Model.BeritaItem;
-import pgd.dev.artproject.HomeActivity;
+import pgd.dev.artproject.Fragments.HomeFragment;
+import pgd.dev.artproject.Model.BeritaItem;
 import pgd.dev.artproject.R;
 
 /**

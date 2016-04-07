@@ -1,4 +1,4 @@
-package Fragments;
+package pgd.dev.artproject.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapter.BeritaAdapter;
-import Model.BeritaItem;
+import pgd.dev.artproject.Adapter.BeritaAdapter;
+import pgd.dev.artproject.Model.BeritaItem;
 import pgd.dev.artproject.R;
 
 /**
