@@ -2,8 +2,9 @@
 
 * build
 
-  *compileSdkVersion 23
-  *buildToolsVersion "23.0.3"
+ *compileSdkVersion 23
+ 
+ *buildToolsVersion "23.0.3"
   
   dependencies { 
     compile 'com.android.support:appcompat-v7:23.2.1'
