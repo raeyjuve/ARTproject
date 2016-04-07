@@ -1,4 +1,4 @@
-package Model;
+package pgd.dev.artproject.Model;
 
 /**
  * Created by aristio on 4/7/2016.
