@@ -1,4 +1,4 @@
-package Adapter;
+package pgd.dev.artproject.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +18,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.NavDrawerItem;
+import pgd.dev.artproject.Controller.UserLocalStore;
+import pgd.dev.artproject.Model.NavDrawerItem;
 import pgd.dev.artproject.R;
 
 /**
@@ -32,22 +33,54 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
-    private static String[] titles = {"Home", "Cek Kredit", "Maps", "Profile", "Logout"};
-    private FragmentDrawerListener drawerListener;
+    private UserLocalStore userLocalStore;
+
+    NavDrawerItem[] itemAll = null;
+    List<NavDrawerItem> listDrawer = new ArrayList<NavDrawerItem>();
+    // add menu item
+    NavDrawerItem[] itemAuth = {
+            new NavDrawerItem(1, "Profil", "pgd.dev.artproject.Fragments.ProfileFragment", 1),
+            new NavDrawerItem(2, "Beranda", "pgd.dev.artproject.Fragments.HomeFragment", 0),
+            new NavDrawerItem(3, "Berita", "pgd.dev.artproject.Fragments.BeritaFragment", 1),
+            new NavDrawerItem(4, "Cek kredit", "pgd.dev.artproject.Fragments.CekKreditFragment", 1),
+            new NavDrawerItem(5, "Simulasi", "pgd.dev.artproject.Fragments.SimulasiFragment", 0),
+            new NavDrawerItem(6, "Lelang", "pgd.dev.artproject.Fragments.LelangFragment", 1),
+            new NavDrawerItem(7, "Maps", "pgd.dev.artproject.Fragments.MapsFragment", 0),
+            new NavDrawerItem(8, "Pengaturan", "pgd.dev.artproject.Fragments.PengaturanFragment", 1),
+            new NavDrawerItem(9, "Logout", "pgd.dev.artproject.Fragments.HomeFragment", 1)
+    };
+
+    NavDrawerItem[] itemNoAuth = {
+            new NavDrawerItem(2, "Beranda", "pgd.dev.artproject.Fragments.HomeFragment", 0),
+            new NavDrawerItem(5, "Simulasi", "pgd.dev.artproject.Fragments.SimulasiFragment", 0),
+            new NavDrawerItem(7, "Maps", "pgd.dev.artproject.Fragments.MapsFragment", 0),
+            new NavDrawerItem(10, "Login", "pgd.dev.artproject.Fragments.LoginFragment", 0)
+    };
 
     public FragmentDrawer() {
     }
+//    private static String[] titles = {"Home", "Cek Kredit", "Maps", "Profile", "Logout"};
+
+    private FragmentDrawerListener drawerListener;
 
     public void setDrawerListener(FragmentDrawerListener listener) {
         this.drawerListener = listener;
     }
 
-    public static List<NavDrawerItem> getData() {
-        List<NavDrawerItem> listDrawer = new ArrayList<>();
-        for (int i = 0; i < titles.length; i++) {
-            NavDrawerItem navItem = new NavDrawerItem();
-            navItem.setTitle(titles[i]);
-            listDrawer.add(navItem);
+//    public static List<NavDrawerItem> getData() {
+//        List<NavDrawerItem> listDrawer = new ArrayList<>();
+//        for (int i = 0; i < titles.length; i++) {
+//            NavDrawerItem navItem = new NavDrawerItem();
+//            navItem.setTitle(titles[i]);
+//            listDrawer.add(navItem);
+//        }
+//        return listDrawer;
+//    }
+
+    public List<NavDrawerItem> getList() {
+        listDrawer.clear();
+        for (NavDrawerItem item : itemAll) {
+            listDrawer.add(item);
         }
         return listDrawer;
     }
@@ -56,6 +89,31 @@ public class FragmentDrawer extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // create and store user
+        userLocalStore = new UserLocalStore(getContext());
+
+        if (authenticate() == true) {
+            itemAll = itemAuth;
+        } else {
+            itemAll = itemNoAuth;
+        }
+    }
+
+    public void updateDrawer() {
+        listDrawer.clear();
+        if (authenticate() == true) {
+            itemAll = itemAuth;
+        } else {
+            itemAll = itemNoAuth;
+        }
+
+        for (NavDrawerItem item : itemAll) {
+            listDrawer.add(item);
+        }
+
+        adapter = new NavigationDrawerAdapter(getActivity(), listDrawer);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
 
     @Nullable
@@ -63,19 +121,21 @@ public class FragmentDrawer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+//        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        adapter = new NavigationDrawerAdapter(getActivity(), getList());
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                drawerListener.onDrawerItemSelected(view, position);
+            public void onClick(View view, int id) {
+                NavDrawerItem item = listDrawer.get(id);
+                drawerListener.onDrawerItemSelected(view, item);
                 mDrawerLayout.closeDrawer(containerView);
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, int id) {
             }
         }));
         return layout;
@@ -163,6 +223,11 @@ public class FragmentDrawer extends Fragment {
     }
 
     public interface FragmentDrawerListener {
-        public void onDrawerItemSelected(View view, int position);
+//        public void onDrawerItemSelected(View view, int position);
+        public void onDrawerItemSelected(View view, NavDrawerItem item);
+    }
+
+    private boolean authenticate(){
+        return userLocalStore.getUserLoggedid();
     }
 }

@@ -1,4 +1,4 @@
-package Adapter;
+package pgd.dev.artproject.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-import Model.NavDrawerItem;
+import pgd.dev.artproject.Model.NavDrawerItem;
 import pgd.dev.artproject.R;
 
 /**
@@ -43,7 +43,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<ViewHolderNavi
     public void onBindViewHolder(ViewHolderNavigation holder, int position) {
         NavDrawerItem navDrawerItem = listDrawerItem.get(position);
         holder.title.setText(navDrawerItem.getTitle());
-        holder.tag.setText(navDrawerItem.getTag());
     }
 
     @Override

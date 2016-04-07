@@ -1,4 +1,4 @@
-package Fragments;
+package pgd.dev.artproject.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;

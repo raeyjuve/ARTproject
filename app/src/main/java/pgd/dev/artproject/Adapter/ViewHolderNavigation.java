@@ -1,4 +1,4 @@
-package Adapter;
+package pgd.dev.artproject.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

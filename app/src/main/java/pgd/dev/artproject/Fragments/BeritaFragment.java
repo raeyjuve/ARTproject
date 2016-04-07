@@ -1,4 +1,4 @@
-package Fragments;
+package pgd.dev.artproject.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import pgd.dev.artproject.R;
 /**
  * Created by Frog-Grammar on 24-Feb-16.
  */
-public class LogoutFragment extends Fragment {
-    public LogoutFragment() {}
+public class BeritaFragment extends Fragment {
+    public BeritaFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class LogoutFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_logout, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         return rootView;
     }
 

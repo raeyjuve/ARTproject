@@ -1,5 +1,6 @@
 package pgd.dev.artproject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pgd.dev.artproject.Controller.User;
+import pgd.dev.artproject.Controller.UserLocalStore;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -19,7 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtEmail, edtPass;
     Button btnLogin;
     TextView txtSignup;
-    
+    UserLocalStore userLocalStore;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         edtPass = (EditText) findViewById(R.id.input_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         txtSignup = (TextView) findViewById(R.id.link_signup);
+
+        userLocalStore = new UserLocalStore(getApplicationContext());
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -52,7 +59,12 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
-        if (!validate()) {
+//        if (!validate()) {
+//            onLoginFailed();
+//            return;
+//        }
+
+        if (!authenticate(new User("rey", "rey"))) {
             onLoginFailed();
             return;
         }
@@ -97,12 +109,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Disable going back to the MainActivity
-        moveTaskToBack(true);
+        moveTaskToBack(false);
     }
 
     public void onLoginSuccess() {
         btnLogin.setEnabled(true);
-        finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(intent, 0);
     }
 
     public void onLoginFailed() {
@@ -133,4 +146,46 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
+    private boolean authenticate(User user) {
+        /**
+         * Jika Menggunakan Rest Untuk Login
+         */
+//        ServerUserRequests serverRequests = new ServerUserRequests(this.getActivity().getBaseContext());
+//        serverRequests.fetchUserDetailInBackground(user, new UserCallback() {
+//            @Override
+//            public void done(User returnUser) {
+//                if (returnUser==null){
+//                    showErrorMessage();
+//                }else{
+//                    LogeUserInt(returnUser);
+//                }
+//            }
+//        });
+
+        /**
+         * Sementara Langsung Login
+         */
+//        LogeUserInt(new User(etUserName.getText().toString(), etUserName.getText().toString(), "1234"));
+        LogeUserInt(new User("IDREY", "Rey", "1234"));
+        return true;
+    }
+
+    private void showErrorMessage() {
+        AlertDialog.Builder diaBuilder = new AlertDialog.Builder(getApplicationContext());
+        diaBuilder.setMessage("incorect user Details ");
+        diaBuilder.setPositiveButton("OK", null);
+        diaBuilder.show();
+    }
+
+    private void LogeUserInt(User returnUser) {
+        userLocalStore.storeUserData(returnUser);
+        userLocalStore.setUserLoggedIn(true);
+
+//        Fragment fragment = new UserFragment();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.container_body, fragment).commit();
+//        ((MainActivity) (getActivity())).updateGenerateDrawer();
+    }
+
 }

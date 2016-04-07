@@ -1,4 +1,4 @@
-package Fragments;
+package pgd.dev.artproject.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import pgd.dev.artproject.R;
 /**
  * Created by Frog-Grammar on 24-Feb-16.
  */
-public class HomeFragment extends Fragment {
-    public HomeFragment() {}
+public class LelangFragment extends Fragment {
+    public LelangFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

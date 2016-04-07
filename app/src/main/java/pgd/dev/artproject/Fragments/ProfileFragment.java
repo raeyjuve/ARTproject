@@ -1,4 +1,4 @@
-package Fragments;
+package pgd.dev.artproject.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import pgd.dev.artproject.R;
 /**
  * Created by Frog-Grammar on 24-Feb-16.
  */
-public class CekKreditFragment extends Fragment {
-    public CekKreditFragment() {}
+public class ProfileFragment extends Fragment {
+    public ProfileFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class CekKreditFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_cek_kredit, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         return rootView;
     }
 
