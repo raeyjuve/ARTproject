@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import Fragments.HomeFragment;
+import pgd.dev.artproject.Fragments.HomeFragment;
 import pgd.dev.artproject.Model.BeritaItem;
 import pgd.dev.artproject.R;
 
