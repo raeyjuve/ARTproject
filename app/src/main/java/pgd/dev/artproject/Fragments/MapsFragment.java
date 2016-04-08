@@ -40,7 +40,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map_container);
         if (fragment == null) {
             fragment = SupportMapFragment.newInstance();
@@ -48,30 +48,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
         fragment.getMapAsync(this);
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (map == null) {
-//            map = fragment.getMap();
-////            map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-//
-//            LatLng latLng = new LatLng(-6.1902144, 106.8466695);
-//
-//            // create marker
-//            // Changing marker icon
-//            // adding marker
-//            MarkerOptions marker = new MarkerOptions().position(latLng).title("Kantor Pusat");
-//            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-//            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
-//
-//            map.addMarker(marker);
-//            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//            map.getUiSettings().setAllGesturesEnabled(true);
-//            map.getUiSettings().setCompassEnabled(true);
-//            map.getUiSettings().setZoomControlsEnabled(true);
-//        }
-//    }
 
     @Override
     public void onDetach() {

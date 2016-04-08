@@ -33,10 +33,12 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
-    private UserLocalStore userLocalStore;
+    private FragmentDrawerListener drawerListener;
 
+    private UserLocalStore userLocalStore;
     NavDrawerItem[] itemAll = null;
     List<NavDrawerItem> listDrawer = new ArrayList<NavDrawerItem>();
+
     // add menu item
     NavDrawerItem[] itemAuth = {
             new NavDrawerItem(1, "Profil", "pgd.dev.artproject.Fragments.ProfileFragment", 1),
@@ -59,23 +61,10 @@ public class FragmentDrawer extends Fragment {
 
     public FragmentDrawer() {
     }
-//    private static String[] titles = {"Home", "Cek Kredit", "Maps", "Profile", "Logout"};
-
-    private FragmentDrawerListener drawerListener;
 
     public void setDrawerListener(FragmentDrawerListener listener) {
         this.drawerListener = listener;
     }
-
-//    public static List<NavDrawerItem> getData() {
-//        List<NavDrawerItem> listDrawer = new ArrayList<>();
-//        for (int i = 0; i < titles.length; i++) {
-//            NavDrawerItem navItem = new NavDrawerItem();
-//            navItem.setTitle(titles[i]);
-//            listDrawer.add(navItem);
-//        }
-//        return listDrawer;
-//    }
 
     public List<NavDrawerItem> getList() {
         listDrawer.clear();

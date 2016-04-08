@@ -1,7 +1,6 @@
 package pgd.dev.artproject;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import pgd.dev.artproject.Adapter.FragmentDrawer;
 import pgd.dev.artproject.Controller.UserLocalStore;
@@ -28,21 +28,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     FragmentManager fragmentManager;
     boolean isLogout = false;
     UserLocalStore userLocalStore;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
-
-        addMenu();
         initComponent();
-    }
-
-    public void addMenu() {
-
     }
 
     public void initComponent() {
@@ -56,9 +49,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
         drawerFragment.setDrawerListener(this);
 
+        // change Title by fragmentID
+//        addBackStackListener(fragmentManager);
+
         userLocalStore = new UserLocalStore(getApplicationContext());
 
-        setDafaultFragment();
+        executeFragment(new HomeFragment(), "Home Fragment");
     }
 
     @Override
@@ -83,47 +79,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         return super.onOptionsItemSelected(item);
     }
 
-    private void setDafaultFragment() {
-        Fragment fragment = new HomeFragment();
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
-            fragmentTransaction.commit();
-
-            // set the toolbar title
-            getSupportActionBar().setTitle("Beranda");
-        }
-    }
-
-//    private void itemMenuChange(int menuId) {
-//        Fragment fragment = null;
-//        String title = "ARTproject";
-//        if (menuId == 0) {
-//            fragment = new HomeFragment();
-//        } else if (menuId == 1) {
-//            fragment = new CekKreditFragment();
-//        } else if (menuId == 2) {
-//            fragment = new MapsFragment();
-//        } else if (menuId == 3) {
-//            fragment = new ProfileFragment();
-//        } else if (menuId == 4) {
-//            isLogout = true;
-////            fragment = new LogoutFragment();
-//        }
-//
-//        if (fragment != null) {
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.container_body, fragment);
-//            fragmentTransaction.commit();
-//            getSupportActionBar().setTitle(title);
-//        }
-//
-//        if (isLogout == true) {
-//            logout();
-//        }
-//    }
-
     @Override
     public void onDrawerItemSelected(View view, NavDrawerItem item) {
         displayView(item);
@@ -137,72 +92,69 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 if (9 == menu.getId()) {
                     // Fungsi Logout
                     logout();
-//                    userLocalStore.clearUsereData();
-//                    userLocalStore.setUserLoggedIn(false);
-//                    updateGenerateDrawer();
+                    title = "Home";
+                } else {
+
+                    title = menu.getTitle();
                 }
                 Class<?> obj = Class.forName(menu.getClassName());
                 fragment = (Fragment) obj.newInstance();
-                title = menu.getTitle();
             }
         } catch (Exception e) {
             e.printStackTrace();
             fragment = new HomeFragment();
         }
 
-        Log.i("Menu Yang di Pilih : ", menu.getClassName().toUpperCase());
+        executeFragment(fragment, title);
+    }
 
+    public void executeFragment(Fragment fragment, String title) {
         if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
-            fragmentTransaction.commit();
+            String backStackName = fragment.getClass().getName();
 
-            // set the toolbar title
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStackName, 0);
+            if (!fragmentPopped && fragmentManager.findFragmentByTag(backStackName) == null) {
+                fragmentManager.popBackStackImmediate(null, 0);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment);
+//                fragmentTransaction.addToBackStack(String.valueOf(fragmentManager.findFragmentById(R.id.container_body)));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
             getSupportActionBar().setTitle(title);
+        }
+        Log.i("Menu Yang di Pilih ", fragment.getClass().getName().toUpperCase());
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_body);
+        if (currentFragment instanceof HomeFragment) {
+            checkDoubleBackPress();
+        } else {
+            executeFragment(new HomeFragment(), "Home");
         }
     }
 
-//    private void displayViewOld(NavDrawerItem item) {
-//        Fragment fragment = null;
-//        String title = getString(R.string.app_name);
-//        try {
-//            if (item != null) {
-//                /**
-//                 *  9 adalah id dari item fragments.LogoutFragment
-//                 *  10 adalah id dari item pgd.dev.artproject.LoginActivity
-//                */
-//                if (9 == item.getId() || 10 == item.getId()) {
-//                    if (9 == item.getId()) {
-//                        // Fungsi Logout
-//                        logout();
-//                    } else {
-//                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                        startActivityForResult(intent, 0);
-//                    }
-//                } else {
-//                    Class<?> obj = Class.forName(item.getClassName());
-//                    fragment = (Fragment) obj.newInstance();
-//                }
-//                title = item.getTitle();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            fragment = new HomeFragment();
-//        }
-//
-//        if (fragment != null) {
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.container_body, fragment);
-//            fragmentTransaction.commit();
-//
-//            getSupportActionBar().setTitle(title);
-//        }
-//    }
+    private void checkDoubleBackPress() {
+        if (doubleBackToExitPressedOnce) {
+            finish();
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 1500);
+    }
 
     private void logout() {
-//        logoutProccess();
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Logging Out...");
@@ -213,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
                         logoutProccess();
-                        // onLoginFailed();
                         progressDialog.dismiss();
                     }
                 }, 1500);
@@ -224,21 +175,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         userLocalStore.setUserLoggedIn(false);
         updateGenerateDrawer();
     }
-
-    private void logoutProccessDua() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivityForResult(intent, 0);
-    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == 0) {
-//            userLocalStore.clearUsereData();
-//            userLocalStore.setUserLoggedIn(false);
-//            updateGenerateDrawer();
-//            this.finish();
-//        }
-//    }
 
     public void updateGenerateDrawer(){
         drawerFragment.updateDrawer();

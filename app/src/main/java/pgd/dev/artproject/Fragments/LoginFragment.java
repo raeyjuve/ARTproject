@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,42 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void authenticate(final User user){
-        /**
-         * Jika Menggunakan Rest Untuk Login
-         */
-//        ServerUserRequests serverRequests = new ServerUserRequests(this.getActivity().getBaseContext());
-//        serverRequests.fetchUserDetailInBackground(user, new UserCallback() {
-//            @Override
-//            public void done(User returnUser) {
-//                if (returnUser==null){
-//                    showErrorMessage();
-//                }else{
-//                    LogeUserInt(returnUser);
-//                }
-//            }
-//        });
-
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
-        Handler handler = new Handler();
-        handler.postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        // onLoginSuccess();
-                        // onLoginFailed();
-                        /**
-                         * Sementara Langsung Login
-                         */
-                        loginProcess(user);
-//                        LogeUserInt(new User(etUserName.getText().toString(), etPassword.getText().toString(), "1234"));
-
-                        progressDialog.dismiss();
-                    }
-                }, 1500);
+        loginProcess(user);
     }
 
     private void showErrorMessage(){
@@ -124,7 +90,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             @Override
             protected void onPreExecute() {
                 bLogin.setEnabled(false);
-                progressDialog = ProgressDialog.show(getActivity(), "Logging in", "Authentication...", true);
+                progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Authenticating...");
+                progressDialog.show();
             }
 
             @Override
@@ -173,16 +142,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         userLocalStore.storeUserData(returnUser);
         userLocalStore.setUserLoggedIn(true);
 
-        bLogin.setEnabled(true);
-
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("userDetails", 0);
         SharedPreferences.Editor spEditor = sharedPreferences.edit();
         spEditor.putString("userIdRec", returnUser.getUserId());
         spEditor.putString("usernameRec", returnUser.getName());
 
         Fragment fragment = new ProfileFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container_body, fragment).commit();
+        executeFragment(fragment, "Profile");
         ((MainActivity) (getActivity())).updateGenerateDrawer();
+    }
+
+    public void executeFragment(Fragment fragment, String title) {
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            boolean fragmentPopped = fragmentManager.popBackStackImmediate(fragment.getClass().getName(), 0);
+            if (!fragmentPopped) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.addToBackStack(String.valueOf(fragmentManager.findFragmentById(R.id.container_body)));
+                fragmentTransaction.replace(R.id.container_body, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+            ((MainActivity) (getActivity())).getSupportActionBar().setTitle(title);
+        }
+        Log.i("Menu Yang di Pilih ", fragment.getClass().getName().toUpperCase());
     }
 }
